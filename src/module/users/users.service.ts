@@ -5,6 +5,7 @@ import { User, UserRole } from './users.entity';
 import { Patient } from '../patients/patients.entity';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
+import { Doctor } from '../doctors/doctors.entity';
 
 @Injectable()
 export class UsersService {
@@ -14,6 +15,9 @@ export class UsersService {
 
     @InjectRepository(Patient)
     private readonly patientRepository: Repository<Patient>,
+    
+    @InjectRepository(Doctor)
+    private readonly doctorRepository: Repository<Doctor>,
   ) {}
 
   async getUsers() {
@@ -83,6 +87,11 @@ export class UsersService {
       });
 
       await this.patientRepository.save(newPatient);
+    } else if (role === UserRole.DOCTOR) {
+      const newDoctor = this.doctorRepository.create({
+        user_id: newUser.id, // Liên kết với user vừa tạo
+      });
+      await this.doctorRepository.save(newDoctor);
     }
 
     return {

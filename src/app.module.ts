@@ -7,8 +7,10 @@ import { JwtStrategy } from './module/auth/jwt.strategy';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { APP_GUARD } from '@nestjs/core';
+import { ScheduleModule } from '@nestjs/schedule';
 import { UsersModule } from './module/users/users.module';
 import { PatientsModule } from './module/patients/patients.module';
+import { Doctor } from './module/doctors/doctors.entity';
 
 @Module({
   imports: [
@@ -27,8 +29,10 @@ import { PatientsModule } from './module/patients/patients.module';
       secret: 'your_secret_key',
       signOptions: { expiresIn: '1d' },
     }),
+    ScheduleModule.forRoot(),
     UsersModule,
-    PatientsModule
+    PatientsModule,
+    Doctor
   ],
   providers: [
     JwtStrategy,

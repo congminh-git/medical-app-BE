@@ -25,4 +25,16 @@ export class PatientsController {
   async delete(@Param('id') id: number): Promise<void> {
     return this.patientsService.delete(id);
   }
+
+  
+
+  @Post('/:id/appointment')
+  async addAppointment(@Param('id') id: number, @Body() appointmentData: { doctorId: number; date: string; index: number; status: string }): Promise<Patient> {
+    return this.patientsService.addAppointment(id, appointmentData);
+  }
+
+  @Put('/:id/appointment/:appointmentId')
+  async updateAppointment(@Param('id') id: number, @Param('appointmentId') appointmentId: string, @Body() updateData: { doctorId: number; date: string; index: number; status: string }): Promise<Patient> {
+    return this.patientsService.updateAppointment(id, appointmentId, updateData);
+  }
 }
