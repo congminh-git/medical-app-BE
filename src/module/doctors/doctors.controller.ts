@@ -6,9 +6,19 @@ import { Doctor } from './doctors.entity';
 export class DoctorsController {
   constructor(private readonly doctorsService: DoctorsService) {}
 
-  @Get(':id')
+  @Get()
+  async findAll(): Promise<Doctor[]> {
+    return this.doctorsService.findAll();
+  }
+
+  @Get('doctor/:id')
   async findOne(@Param('id') id: number): Promise<Doctor | null> {
     return this.doctorsService.findOne(id);
+  }
+
+  @Get('top-new')
+  async findTopNew(): Promise<Doctor[]> {
+    return this.doctorsService.findTopNew();
   }
 
   @Post()

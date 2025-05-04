@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { ArticlesService } from './articles.service';
 import { Article } from './articles.entity';
 
@@ -11,13 +19,20 @@ export class ArticlesController {
     return this.articlesService.findAll();
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: number): Promise<Article | null> {
-    return this.articlesService.findOne(id);
+  @Put('/article/:id/like/:userID')
+  async findOne(@Param('id') id: number, @Param('userID') userID:number): Promise<Article | null> {
+    return this.articlesService.findOneToLike(id, userID);
+  }
+
+  @Get('/article/:id/:slug')
+  async findBySlug(@Param('id') id: number, @Param('slug') slug: string): Promise<Article | null> {
+    return this.articlesService.findOneSlug(id, slug);
   }
 
   @Get('specialty/:specialty')
-  async findBySpecialty(@Param('specialty') specialty: string): Promise<Article[]> {
+  async findBySpecialty(
+    @Param('specialty') specialty: string,
+  ): Promise<Article[]> {
     return this.articlesService.findBySpecialty(specialty);
   }
 
@@ -26,13 +41,32 @@ export class ArticlesController {
     return this.articlesService.create(articleData);
   }
 
-  @Put(':id')
-  async update(@Param('id') id: number, @Body() articleData: Partial<Article>): Promise<Article> {
-    return this.articlesService.update(id, articleData);
+  @Put(':id/:slug')
+  async update(
+    @Param('id') id: number,
+    @Param('slug') slug: string,
+    @Body() articleData: Partial<Article>,
+  ): Promise<Article> {
+    return this.articlesService.update(id, slug, articleData);
   }
 
-  @Delete(':id')
-  async delete(@Param('id') id: number): Promise<void> {
-    return this.articlesService.delete(id);
+  @Delete(':id/:doctorID')
+  async delete(@Param('id') id: number, @Param('doctorID') doctorID: number): Promise<void> {
+    return this.articlesService.delete(id, doctorID);
+  }
+
+  @Get('latest')
+  async findLatestThree(): Promise<Article[]> {
+    return this.articlesService.findLatestThree();
+  }
+
+  @Get('top-views')
+  async findTopViewed(): Promise<Article[]> {
+    return this.articlesService.findTopViewed();
+  }
+
+  @Get('user/:userId')
+  async findByUser(@Param('userId') userId: number): Promise<Article[]> {
+    return this.articlesService.findByUser(userId);
   }
 }

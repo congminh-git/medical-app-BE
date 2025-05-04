@@ -7,15 +7,16 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly configService: ConfigService) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), // Lấy token từ header Authorization
-      ignoreExpiration: false, // Không bỏ qua kiểm tra hạn token
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false, // Bắt buộc kiểm tra hạn token
       secretOrKey: configService.get<string>('JWT_SECRET') || 'your_secret_key',
     });
   }
 
   async validate(payload: any) {
-    if (!payload) {
-      throw new UnauthorizedException('Token không hợp lệ');
+
+    if (!payload || payload.exp * 1000 < Date.now()) {
+      throw new UnauthorizedException('Token đã hết hạn');
     }
 
     return { id: payload.id, email: payload.email, role: payload.role };

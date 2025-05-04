@@ -21,13 +21,18 @@ export class UsersController {
     return await this.usersService.updateUser(id, updateUserDto);
   }
 
+  @Post('')
+  async addUser(@Body() addUserDto: any) {
+    return await this.usersService.registerUser(addUserDto);
+  }
+
   @Delete(':id')
   async deleteUser(@Param('id') id: number) {
     return await this.usersService.deleteUser(id);
   }
 
   @Public()
-  @Post('register')
+  @Post('/register')
   async registerUser(@Body() body) {
     return await this.usersService.registerUser(body);
   }
@@ -36,5 +41,15 @@ export class UsersController {
   @Post('login')
   async loginUser(@Body() body) {
     return await this.usersService.loginUser(body.email, body.password);
+  }
+
+  @Get('/image/:id')
+  async getUserImage(@Param('id') id: number) {
+    return await this.usersService.getUserImage(id);
+  }
+
+  @Put(':id/image')
+  async updateUserImage(@Param('id') id: number, @Body() updateUserDto: any) {
+    return await this.usersService.updateUserImage(id, updateUserDto);
   }
 }

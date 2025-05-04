@@ -1,6 +1,7 @@
-import { Entity, PrimaryColumn, Column, OneToOne, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryColumn, Column, OneToOne, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { User } from '../users/users.entity';
 import { Specialty } from '../specialties/specialties.entity';
+import { Appointment } from '../appointments/appointments.entity';
 
 @Entity('doctors')
 export class Doctor {
@@ -22,6 +23,9 @@ export class Doctor {
   specialty: Specialty;
 
   @Column({ type: 'int', nullable: true })
+  specialty_id: number;
+
+  @Column({ type: 'int', nullable: true })
   experience_years: number;
 
   @Column({ type: 'text', nullable: true })
@@ -38,7 +42,4 @@ export class Doctor {
 
   @Column({ type: 'boolean', default: false })
   is_verified: boolean;
-
-  @Column({ type: 'json', nullable: true })
-  appointment_schedule: Record<string, any>;
 }

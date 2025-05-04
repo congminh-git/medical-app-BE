@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, OneToMany } from 'typeorm';
 import { User } from '../users/users.entity';
+import { Appointment } from '../appointments/appointments.entity';
 
 @Entity('patients')
 export class Patient {
@@ -30,9 +31,6 @@ export class Patient {
 
   @Column({ type: 'float', nullable: true })
   weight: number;
-
-  @Column({ type: 'json', nullable: true })
-  appointment: Record<string, any>;
 
   @Column({ type: 'text', nullable: true })
   descriptions: string;

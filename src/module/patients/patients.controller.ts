@@ -6,6 +6,11 @@ import { Patient } from './patients.entity';
 export class PatientsController {
   constructor(private readonly patientsService: PatientsService) {}
 
+  @Get('')
+  async findAll(): Promise<Patient[] | null> {
+    return this.patientsService.getAll();
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: number): Promise<Patient | null> {
     return this.patientsService.findOne(id);
@@ -24,17 +29,5 @@ export class PatientsController {
   @Delete(':id')
   async delete(@Param('id') id: number): Promise<void> {
     return this.patientsService.delete(id);
-  }
-
-  
-
-  @Post('/:id/appointment')
-  async addAppointment(@Param('id') id: number, @Body() appointmentData: { doctorId: number; date: string; index: number; status: string }): Promise<Patient> {
-    return this.patientsService.addAppointment(id, appointmentData);
-  }
-
-  @Put('/:id/appointment/:appointmentId')
-  async updateAppointment(@Param('id') id: number, @Param('appointmentId') appointmentId: string, @Body() updateData: { doctorId: number; date: string; index: number; status: string }): Promise<Patient> {
-    return this.patientsService.updateAppointment(id, appointmentId, updateData);
   }
 }

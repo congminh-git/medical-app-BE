@@ -1,5 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { Doctor } from "../doctors/doctors.entity";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { Doctor } from '../doctors/doctors.entity';
 
 @Entity('articles')
 export class Article {
@@ -9,6 +17,9 @@ export class Article {
   @ManyToOne(() => Doctor, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'doctor_id' })
   doctor: Doctor;
+
+  @Column({ type: 'int' })
+  doctor_id: number;
 
   @Column({ type: 'text' })
   specialties: string;
@@ -22,9 +33,18 @@ export class Article {
   @Column({ type: 'int', default: 0 })
   views: number;
 
-  @Column({ type: 'int', default: 0 })
-  likes: number;
+  @Column({ type: 'text', default: "" })
+  likes: string;
 
   @Column({ type: 'json', nullable: true })
   comments: Record<string, any>;
+
+  @Column({type: 'longtext', nullable: true})
+  image: string;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  created_at: Date;
+
+  @UpdateDateColumn({ type: 'timestamp' })
+  updated_at: Date;
 }
