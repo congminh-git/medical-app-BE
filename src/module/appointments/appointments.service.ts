@@ -75,7 +75,6 @@ export class AppointmentsService {
         'consultations.recommendations',
         'consultations.notes',
         'consultations.created_at',
-        'consultations.updated_at',
         'consultations.prescription_id',
       ])
       .where('appointment.doctor_id = :doctorId', { doctorId })
@@ -107,7 +106,6 @@ export class AppointmentsService {
         'consultations.recommendations',
         'consultations.notes',
         'consultations.created_at',
-        'consultations.updated_at',
         'consultations.prescription_id',
       ])
       .where('appointment.patient_id = :patientId', { patientId })

@@ -6,6 +6,7 @@ import {
   Param,
   Put,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ArticlesService } from './articles.service';
 import { Article } from './articles.entity';
@@ -20,12 +21,18 @@ export class ArticlesController {
   }
 
   @Put('/article/:id/like/:userID')
-  async findOne(@Param('id') id: number, @Param('userID') userID:number): Promise<Article | null> {
+  async findOne(
+    @Param('id') id: number,
+    @Param('userID') userID: number,
+  ): Promise<Article | null> {
     return this.articlesService.findOneToLike(id, userID);
   }
 
   @Get('/article/:id/:slug')
-  async findBySlug(@Param('id') id: number, @Param('slug') slug: string): Promise<Article | null> {
+  async findBySlug(
+    @Param('id') id: number,
+    @Param('slug') slug: string,
+  ): Promise<Article | null> {
     return this.articlesService.findOneSlug(id, slug);
   }
 
@@ -51,7 +58,10 @@ export class ArticlesController {
   }
 
   @Delete(':id/:doctorID')
-  async delete(@Param('id') id: number, @Param('doctorID') doctorID: number): Promise<void> {
+  async delete(
+    @Param('id') id: number,
+    @Param('doctorID') doctorID: number,
+  ): Promise<void> {
     return this.articlesService.delete(id, doctorID);
   }
 
@@ -68,5 +78,18 @@ export class ArticlesController {
   @Get('user/:userId')
   async findByUser(@Param('userId') userId: number): Promise<Article[]> {
     return this.articlesService.findByUser(userId);
+  }
+
+  @Get('random')
+  async getRandomArticle(): Promise<Article[] | null> {
+    return this.articlesService.getRandomArticles();
+  }
+
+  @Get('care')
+  async getCareArticles(
+    @Query('diseases') diseases: string,
+    @Query('symptoms') symptoms: string,
+  ): Promise<Article[]> {
+    return this.articlesService.getCareArticles(diseases, symptoms);
   }
 }

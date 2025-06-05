@@ -14,6 +14,6 @@ async function bootstrap() {
     allowedHeaders: 'Content-Type,Authorization', // Các headers cho phép
     credentials: true, // Cho phép gửi cookie nếu cần
   });
-  await app.listen(3001);
+  await app.listen(process.env.PORT);
 }
 bootstrap();
