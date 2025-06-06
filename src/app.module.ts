@@ -34,12 +34,15 @@ import { ReviewsModule } from './module/reviews/reviews.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        type: 'mysql',
+        type: 'postgres',
         host: configService.get<string>('DB_HOST'),
         port: configService.get<number>('DB_PORT'),
         username: configService.get<string>('DB_USER'),
         password: configService.get<string>('DB_PASS'),
         database: configService.get<string>('DB_NAME'),
+        ssl: {
+          rejectUnauthorized: false, // thường dùng để bỏ qua việc xác thực chứng chỉ SSL (không khuyến nghị dùng cho production)
+        },
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: false,
       }),

@@ -54,6 +54,6 @@ export class Consultation {
   @Column({ type: 'text', nullable: true })
   notes: string | null;
 
-  @CreateDateColumn({ type: 'datetime', nullable: true })
+  @CreateDateColumn({ type: 'timestamp', nullable: true })
   created_at: Date | null;
 }

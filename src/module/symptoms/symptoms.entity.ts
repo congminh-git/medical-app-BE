@@ -11,6 +11,6 @@ export class Symptom {
   @Column({ type: 'text', nullable: true })
   description: string;
 
-  @CreateDateColumn({ type: 'datetime', nullable: true })
+  @CreateDateColumn({ type: 'timestamp', nullable: true })
   created_at: Date | null;
 }

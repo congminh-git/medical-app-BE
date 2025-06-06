@@ -23,8 +23,8 @@ export class Messages {
   @Column({ type: 'int'})
   receiver_id: number;
 
-  @Column({ type: 'tinyint', default: 0 })
-  readed: number;
+  @Column({ type: 'boolean', default: 0 })
+  readed: boolean;
 
   @Column({ type: 'timestamp'})
   created_at: Date;

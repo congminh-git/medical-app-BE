@@ -61,7 +61,7 @@ export class MessagesService {
     });
 
     messages.forEach((msg) => {
-      msg.readed = 1;
+      msg.readed = true;
     });
 
     if (messages.length > 0) {
@@ -85,12 +85,12 @@ export class MessagesService {
 
     // Cập nhật các tin nhắn gửi đến userId1 mà chưa đọc
     const unreadMessages = messages.filter(
-      (msg) => msg.receiver_id == userId1 && msg.readed == 0,
+      (msg) => msg.receiver_id == userId1 && msg.readed == false,
     );
 
     if (unreadMessages.length > 0) {
       for (const msg of unreadMessages) {
-        msg.readed = 1;
+        msg.readed = true;
       }
       await this.messageRepository.save(unreadMessages);
     }
@@ -123,7 +123,7 @@ export class MessagesService {
   async getAllUnreadMessages(userId: number): Promise<Messages[]> {
     // Lấy tin nhắn gửi đi và nhận vào
     const sentMessages = await this.messageRepository.find({
-      where: { receiver_id: userId, readed: 0 },
+      where: { receiver_id: userId, readed: false },
     });
     return sentMessages;
   }

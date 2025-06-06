@@ -37,7 +37,7 @@ export class User {
   @Column({ length: 20 })
   phone_number: string;
 
-  @Column({type: 'longtext', nullable: true})
+  @Column({type: 'text', nullable: true})
   image: string;
 
   @Column({ type: 'enum', enum: UserRole })

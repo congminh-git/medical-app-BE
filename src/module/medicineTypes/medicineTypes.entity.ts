@@ -8,6 +8,6 @@ export class MedicineType {
   @Column({ type: 'varchar', unique: true })
   name: string;
 
-  @CreateDateColumn({ type: 'datetime', nullable: true })
+  @CreateDateColumn({ type: 'timestamp', nullable: true })
   created_at: Date | null;
 }

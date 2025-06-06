@@ -39,7 +39,7 @@ export class Article {
   @Column({ type: 'json', nullable: true })
   comments: Record<string, any>;
 
-  @Column({type: 'longtext', nullable: true})
+  @Column({type: 'text', nullable: true})
   image: string;
 
   @CreateDateColumn({ type: 'timestamp' })
