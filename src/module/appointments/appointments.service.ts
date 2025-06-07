@@ -206,6 +206,7 @@ export class AppointmentsService {
 
     for (const appointment of appointmentsIn30Minutes) {
       await this.emailService.sendConfirmationEmail(appointment.id);
+      await this.emailService.sendDoctorAppointmentEmail(appointment.id);
     }
   }
 

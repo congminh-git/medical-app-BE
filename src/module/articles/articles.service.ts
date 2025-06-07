@@ -171,7 +171,6 @@ export class ArticlesService {
       matchedArticles = await query.limit(6).getMany();
     }
 
-    // Nếu chưa đủ 6 bài, lấy thêm bài ngẫu nhiên (PostgreSQL dùng RANDOM())
     if (matchedArticles.length < 6) {
       const additionalArticles = await this.articleRepository
         .createQueryBuilder('article')

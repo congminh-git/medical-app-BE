@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, Query } from '@nestjs/common';
 import { DoctorsService } from './doctors.service';
 import { Doctor } from './doctors.entity';
 
@@ -17,8 +17,10 @@ export class DoctorsController {
   }
 
   @Get('top-new')
-  async findTopNew(): Promise<Doctor[]> {
-    return this.doctorsService.findTopNew();
+  async findTopNew(
+    @Query('recommendation') recommendation: string,
+  ): Promise<Doctor[]> {
+    return this.doctorsService.findTopNew(recommendation);
   }
 
   @Post()

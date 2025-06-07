@@ -131,6 +131,38 @@ export class MailService {
     return this.sendEmail(to, subject, html);
   }
 
+  async sendDoctorAppointmentEmail(appointmentID: number) {
+    const appointment = await this.getAppointment(appointmentID);
+    const user = await this.getUser(appointment.doctor_id);
+  
+    const to = user.email;
+    const name = user.full_name;
+  
+    // Convert appointment_time to Vietnam time format using Intl.DateTimeFormat
+    const appointmentTime = new Date(appointment.appointment_time * 1000);
+    const formatter = new Intl.DateTimeFormat('vi-VN', {
+      timeZone: 'Asia/Ho_Chi_Minh',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+    const formattedTime = formatter.format(appointmentTime);
+  
+    const subject = 'Xác nhận tham gia lịch tư vấn';
+    const html = `
+      <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+        <p>Chào ${name},</p>
+        <p>Buổi tư vấn của bạn vào lúc ${formattedTime} sắp diễn ra.</p>
+        <p>Vui lòng đảm bảo tham gia tư vấn để không ảnh hưởng đến bận nhân của mình</p>
+        <p>Trân trọng,<br>Đội ngũ Chăm sóc Sức khỏe<br>Hệ thống ConnectionCare</p>
+      </div>
+    `;
+    return this.sendEmail(to, subject, html);
+  }
+
   async sendRescheduleEmail(id: number, nextAppointmentID: number) {
     const appointment = await this.getAppointment(nextAppointmentID);
     const user = await this.getUser(appointment.patient_id);
