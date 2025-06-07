@@ -1,10 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, OneToMany, PrimaryColumn } from 'typeorm';
 import { User } from '../users/users.entity';
 import { Appointment } from '../appointments/appointments.entity';
 
 @Entity('patients')
 export class Patient {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   user_id: number;
 
   @OneToOne(() => User, { onDelete: 'CASCADE' }) // Khi user bị xóa, patient cũng sẽ bị xóa

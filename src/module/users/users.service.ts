@@ -149,60 +149,85 @@ export class UsersService {
   }
 
   async registerUser(body) {
-    const { full_name, email, password, phone_number, image, role } = body;
+  const { full_name, email, password, phone_number, image, role } = body;
 
-    if (!password) {
-      throw new HttpException(
-        'Mật khẩu không được để trống',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+  // Kiểm tra password
+  if (!password) {
+    throw new HttpException(
+      'Mật khẩu không được để trống',
+      HttpStatus.BAD_REQUEST,
+    );
+  }
 
-    const existingUser = await this.getUserByEmail(email);
-    if (existingUser) {
-      throw new HttpException('Email đã tồn tại', HttpStatus.CONFLICT);
-    }
+  // Kiểm tra email đã tồn tại
+  const existingUser = await this.getUserByEmail(email);
+  if (existingUser) {
+    throw new HttpException('Email đã tồn tại', HttpStatus.CONFLICT);
+  }
 
-    const salt = await bcrypt.genSalt(10);
-    const password_hash = await bcrypt.hash(password, salt);
+  // Kiểm tra role hợp lệ
+  if (!Object.values(UserRole).includes(role as UserRole)) {
+    throw new HttpException('Vai trò không hợp lệ', HttpStatus.BAD_REQUEST);
+  }
 
-    if (!Object.values(UserRole).includes(role as UserRole)) {
-      throw new HttpException('Vai trò không hợp lệ', HttpStatus.BAD_REQUEST);
-    }
+  // Mã hóa password
+  const salt = await bcrypt.genSalt(10);
+  const password_hash = await bcrypt.hash(password, salt);
 
-    // Tạo user mới
-    const newUser = this.userRepository.create({
-      full_name,
-      email,
-      password_hash,
-      phone_number,
-      image,
-      role: role as UserRole,
-    });
+  // CÁCH 1: Tạo user trước, sau đó tạo patient/doctor
+  const newUser = this.userRepository.create({
+    full_name,
+    email,
+    password_hash,
+    phone_number,
+    image,
+    role: role as UserRole,
+  });
 
-    await this.userRepository.save(newUser);
+  // Lưu user và đợi để có ID
+  const savedUser = await this.userRepository.save(newUser);
 
-    // Nếu role là "patient", tạo một bản ghi trong bảng patients
+  // Debug: Log ra để kiểm tra
+  console.log('Saved user ID:', savedUser.id);
+
+  // Kiểm tra ID có tồn tại không
+  if (!savedUser.id) {
+    throw new HttpException('Không thể tạo user', HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  // Tạo bản ghi theo role SAU KHI đã có user ID
+  try {
     if (role === UserRole.PATIENT) {
       const newPatient = this.patientRepository.create({
-        user_id: newUser.id, // Liên kết với user vừa tạo
+        user_id: savedUser.id,
       });
-
       await this.patientRepository.save(newPatient);
+      
     } else if (role === UserRole.DOCTOR) {
       const newDoctor = this.doctorRepository.create({
-        user_id: newUser.id, // Liên kết với user vừa tạo
+        user_id: savedUser.id,
       });
       await this.doctorRepository.save(newDoctor);
     }
-
-    return {
-      status: '201',
-      message: 'Đăng ký thành công',
-      data: { id: newUser.id, full_name, email, image, phone_number, role },
-    };
+  } catch (error) {
+    // Nếu tạo patient/doctor lỗi, xóa user đã tạo
+    await this.userRepository.delete(savedUser.id);
+    throw error;
   }
 
+  return {
+    status: '201',
+    message: 'Đăng ký thành công',
+    data: { 
+      id: savedUser.id, 
+      full_name: savedUser.full_name, 
+      email: savedUser.email, 
+      image: savedUser.image, 
+      phone_number: savedUser.phone_number, 
+      role: savedUser.role 
+    },
+  };
+}
   async getUserByEmail(email: string): Promise<User | null> {
     return await this.userRepository.findOne({ where: { email } });
   }

@@ -25,7 +25,7 @@ export class MailService {
 
   async sendEmail(to: string, subject: string, html: string) {
     return this.transporter.sendMail({
-      from: '"Hệ thống Healthcare" <congminh0801@gmail.com>',
+      from: '"Hệ thống ConnectionCare" <congminh0801@gmail.com>',
       to,
       subject,
       html,
@@ -63,7 +63,7 @@ export class MailService {
   
       <p>Trân trọng,<br>
       Đội ngũ Chăm sóc Sức khỏe<br>
-      Hệ thống Healthcare</p>
+      Hệ thống ConnectionCare</p>
     `;
 
     return this.sendEmail(to, subject, html);
@@ -80,7 +80,7 @@ export class MailService {
   
       <p>Nếu bạn cho rằng đây là sự hiểu lầm hoặc cần được hỗ trợ thêm thông tin, xin vui lòng liên hệ bộ phận hỗ trợ khách hàng của chúng tôi qua:</p>
       <ul>
-        <li>Email: support@yourhealthcare.com</li>
+        <li>Email: support@yourconnectioncare.com</li>
         <li>Hotline: 1900 123 456</li>
       </ul>
   
@@ -88,7 +88,7 @@ export class MailService {
   
       <p>Trân trọng,<br>
       Đội ngũ Quản trị Hệ thống<br>
-      Hệ thống Healthcare</p>
+      Hệ thống ConnectionCare</p>
     `;
 
     return this.sendEmail(to, subject, html);
@@ -125,7 +125,7 @@ export class MailService {
           <a href="http://localhost:3001/mail/confirm?appointmentID=${appointmentID}&response=yes" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 5px; margin-right: 10px;">Có</a>
           <a href="http://localhost:3001/mail/confirm?appointmentID=${appointmentID}&response=no" style="background-color: #f44336; color: white; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 5px;">Không</a>
         </div>
-        <p>Trân trọng,<br>Đội ngũ Chăm sóc Sức khỏe<br>Hệ thống Healthcare</p>
+        <p>Trân trọng,<br>Đội ngũ Chăm sóc Sức khỏe<br>Hệ thống ConnectionCare</p>
       </div>
     `;
     return this.sendEmail(to, subject, html);
@@ -163,7 +163,7 @@ export class MailService {
           <a href="http://localhost:3001/mail/reSchedule-confirm?appointmentID=${nextAppointmentID}&beforeAppointment=${id}&response=no" style="background-color: #f44336; color: white; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 5px;">Không</a>
         </div>
         <p>Cảm ơn đã hỗ trợ chúng tôi</p>
-        <p>Trân trọng,<br>Đội ngũ Chăm sóc Sức khỏe<br>Hệ thống Healthcare</p>
+        <p>Trân trọng,<br>Đội ngũ Chăm sóc Sức khỏe<br>Hệ thống ConnectionCare</p>
       </div>
     `;
     return this.sendEmail(to, subject, html);
@@ -252,7 +252,7 @@ export class MailService {
         <p>Bạn đã xác nhận không thể tham gia lịch hẹn gần nhất, tuy nhiên chúng tôi đã cố gắng hỗ trợ và xử lý dời lịch của bạn 30ph để bạn có cơ hội chuẩn bị thời gian</p>
         <p>Lịch hẹn mới sẽ là ${formattedTime}</p>
         <p>Hãy cố gắng sắp xếp thời gian để tham dự</p>
-        <p>Trân trọng,<br>Đội ngũ Chăm sóc Sức khỏe<br>Hệ thống Healthcare</p>
+        <p>Trân trọng,<br>Đội ngũ Chăm sóc Sức khỏe<br>Hệ thống ConnectionCare</p>
       </div>
     `;
     return this.sendEmail(to, subject, html);
@@ -285,7 +285,7 @@ export class MailService {
         <p>Cảm ơn bạn vì đã hỗ trợ chúng tôi để giúp đỡ bác sĩ và các bệnh nhân khác trong việc tham gia tư vấn trực tuyến đúng lịch, chúng tôi đã đẩy lịch hẹn của bạn lên sớm 30ph như bạn đã xác nhận</p>
         <p>Lịch hẹn mới sẽ là ${formattedTime}</p>
         <p>Vô cùng biết hơn bạn vì sự giúp đỡ này</p>
-        <p>Trân trọng,<br>Đội ngũ Chăm sóc Sức khỏe<br>Hệ thống Healthcare</p>
+        <p>Trân trọng,<br>Đội ngũ Chăm sóc Sức khỏe<br>Hệ thống ConnectionCare</p>
       </div>
     `;
     return this.sendEmail(to, subject, html);
