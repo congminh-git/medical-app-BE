@@ -131,13 +131,13 @@ export class ArticlesService {
     });
   }
 
-async getRandomArticles(): Promise<Article[]> {
-  const articles = await this.articleRepository.find();
-  if (articles.length === 0) return [];
-  const shuffled = articles.sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, 6);
-}
-
+  async getRandomArticles(): Promise<Article[]> {
+    return this.articleRepository
+      .createQueryBuilder('article')
+      .orderBy('RANDOM()') // PostgreSQL syntax
+      .limit(6)
+      .getMany();
+  }
 
   async getCareArticles(
     diseases: string,
@@ -146,9 +146,11 @@ async getRandomArticles(): Promise<Article[]> {
     const diseaseKeywords = diseases
       ? diseases.split(',').map((s) => s.trim().toLowerCase())
       : [];
+
     const symptomKeywords = symptoms
       ? symptoms.split(',').map((s) => s.trim().toLowerCase())
       : [];
+
     const keywords = [...diseaseKeywords, ...symptomKeywords];
 
     let matchedArticles: Article[] = [];
@@ -169,7 +171,7 @@ async getRandomArticles(): Promise<Article[]> {
       matchedArticles = await query.limit(6).getMany();
     }
 
-    // Nếu chưa đủ 6 bài, lấy thêm bài ngẫu nhiên
+    // Nếu chưa đủ 6 bài, lấy thêm bài ngẫu nhiên (PostgreSQL dùng RANDOM())
     if (matchedArticles.length < 6) {
       const additionalArticles = await this.articleRepository
         .createQueryBuilder('article')
@@ -177,7 +179,7 @@ async getRandomArticles(): Promise<Article[]> {
           ids:
             matchedArticles.length > 0 ? matchedArticles.map((a) => a.id) : [0],
         })
-        .orderBy('RAND()') // PostgreSQL: dùng 'RANDOM()'
+        .orderBy('RANDOM()') // PostgreSQL random order
         .limit(6 - matchedArticles.length)
         .getMany();
 
