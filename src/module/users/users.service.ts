@@ -6,6 +6,7 @@ import { Patient } from '../patients/patients.entity';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { Doctor } from '../doctors/doctors.entity';
+import { UserStatus } from './users.entity';
 
 @Injectable()
 export class UsersService {
@@ -86,20 +87,24 @@ export class UsersService {
     // Nếu có details, cập nhật thông tin dựa theo role
     if (details) {
       if (user.data.role === UserRole.DOCTOR) {
-        await this.doctorRepository.update(
-          { user_id: id },
-          {
-            license_number: details.license_number,
-            gender: details.gender,
-            specialty_id: details.specialty_id,
-            experience_years: details.experience_years,
-            education: details.education,
-            workplace: details.workplace,
-            bio: details.bio,
-            consultation_fee: details.consultation_fee,
-            is_verified: details.is_verified,
-          },
-        );
+        // Chỉ cập nhật các trường được cung cấp
+        const updateData: any = {};
+        if (details.license_number !== undefined) updateData.license_number = details.license_number;
+        if (details.gender !== undefined) updateData.gender = details.gender;
+        if (details.specialty_id !== undefined) updateData.specialty_id = details.specialty_id;
+        if (details.experience_years !== undefined) updateData.experience_years = details.experience_years;
+        if (details.education !== undefined) updateData.education = details.education;
+        if (details.workplace !== undefined) updateData.workplace = details.workplace;
+        if (details.bio !== undefined) updateData.bio = details.bio;
+        if (details.consultation_fee !== undefined) updateData.consultation_fee = details.consultation_fee;
+        if (details.is_verified !== undefined) updateData.is_verified = details.is_verified;
+
+        await this.doctorRepository
+          .createQueryBuilder()
+          .update(Doctor)
+          .set(updateData)
+          .where('user_id = :id', { id })
+          .execute();
       } else if (user.data.role === UserRole.PATIENT) {
         await this.patientRepository.update({ user_id: id }, {
           date_of_birth: details.date_of_birth,
@@ -242,6 +247,14 @@ export class UsersService {
       );
     }
 
+    // Kiểm tra trạng thái user
+    if (user.status === UserStatus.INACTIVE) {
+      throw new HttpException(
+        'Tài khoản của bạn đã bị vô hiệu hóa',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+
     // Kiểm tra mật khẩu
     const isPasswordValid = await bcrypt.compare(password, user.password_hash);
     if (!isPasswordValid) {
@@ -276,6 +289,23 @@ export class UsersService {
       data: {
         token,
       },
+    };
+  }
+
+  async toggleUserStatus(id: number) {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new HttpException('Người dùng không tồn tại', HttpStatus.NOT_FOUND);
+    }
+
+    // Toggle status giữa ACTIVE và INACTIVE
+    user.status = user.status === UserStatus.ACTIVE ? UserStatus.INACTIVE : UserStatus.ACTIVE;
+    await this.userRepository.save(user);
+
+    return {
+      status: '200',
+      message: `Cập nhật trạng thái người dùng thành công`,
+      data: user,
     };
   }
 }

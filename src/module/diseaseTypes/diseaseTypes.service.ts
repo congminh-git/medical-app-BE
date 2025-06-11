@@ -10,17 +10,18 @@ export class DiseaseTypesService {
     private readonly diseaseTypeRepository: Repository<DiseaseType>,
   ) {}
 
-  async create(createDto: any) {
+  async create(createDto: any): Promise<any> {
     const newEntity = this.diseaseTypeRepository.create(createDto);
     return this.diseaseTypeRepository.save(newEntity);
   }
 
-  async findAll(): Promise<DiseaseType[]> {
-    return this.diseaseTypeRepository.find({
+  async findAll(): Promise<Array<DiseaseType>> {
+    const diseaseTypes = await this.diseaseTypeRepository.find({
       order: {
         name: 'ASC',  // Sắp xếp theo trường 'name' từ A đến Z
       },
-    });
+    }) as Array<DiseaseType>;
+    return diseaseTypes;
   }
 
   async findOne(id: number): Promise<DiseaseType> {
@@ -37,7 +38,7 @@ export class DiseaseTypesService {
     return this.diseaseTypeRepository.save(updated);
   }
 
-  async remove(id: number): Promise<void> {
+  async delete(id: number): Promise<void> {
     const entity = await this.findOne(id);
     await this.diseaseTypeRepository.remove(entity);
   }

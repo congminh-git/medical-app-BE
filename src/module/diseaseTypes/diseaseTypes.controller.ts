@@ -3,8 +3,8 @@ import {
   Get,
   Post,
   Body,
-  Param,
   Put,
+  Param,
   Delete,
 } from '@nestjs/common';
 import { DiseaseTypesService } from './diseaseTypes.service';
@@ -36,6 +36,6 @@ export class DiseaseTypesController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.diseaseTypesService.remove(+id);
+    return this.diseaseTypesService.delete(+id);
   }
 }

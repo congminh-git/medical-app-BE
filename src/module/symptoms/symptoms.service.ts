@@ -10,17 +10,18 @@ export class SymptomsService {
     private readonly symptomRepository: Repository<Symptom>,
   ) {}
 
-  async create(createDto: any) {
+  async create(createDto: any): Promise<any> {
     const newEntity = this.symptomRepository.create(createDto);
     return this.symptomRepository.save(newEntity);
   }
 
-  async findAll(): Promise<Symptom[]> {
-    return this.symptomRepository.find({
+  async findAll(): Promise<Array<Symptom>> {
+    const symptoms = await this.symptomRepository.find({
       order: {
         name: 'ASC',  // Sắp xếp theo trường 'name' từ A đến Z
       },
-    });
+    }) as Array<Symptom>;
+    return symptoms;
   }
 
   async findOne(id: number): Promise<Symptom> {
@@ -37,7 +38,7 @@ export class SymptomsService {
     return this.symptomRepository.save(updated);
   }
 
-  async remove(id: number): Promise<void> {
+  async delete(id: number): Promise<void> {
     const entity = await this.findOne(id);
     await this.symptomRepository.remove(entity);
   }

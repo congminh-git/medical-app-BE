@@ -113,10 +113,22 @@ export class DoctorsService {
   }
 
   async update(id: number, doctorData: Partial<Doctor>): Promise<Doctor> {
+    // Chỉ cập nhật các trường được cung cấp
+    const updateData: any = {};
+    if (doctorData.license_number !== undefined) updateData.license_number = doctorData.license_number;
+    if (doctorData.gender !== undefined) updateData.gender = doctorData.gender;
+    if (doctorData.specialty_id !== undefined) updateData.specialty_id = doctorData.specialty_id;
+    if (doctorData.experience_years !== undefined) updateData.experience_years = doctorData.experience_years;
+    if (doctorData.education !== undefined) updateData.education = doctorData.education;
+    if (doctorData.workplace !== undefined) updateData.workplace = doctorData.workplace;
+    if (doctorData.bio !== undefined) updateData.bio = doctorData.bio;
+    if (doctorData.consultation_fee !== undefined) updateData.consultation_fee = doctorData.consultation_fee;
+    if (doctorData.is_verified !== undefined) updateData.is_verified = doctorData.is_verified;
+
     await this.doctorRepository
       .createQueryBuilder()
       .update(Doctor)
-      .set(doctorData)
+      .set(updateData)
       .where('user_id = :id', { id })
       .execute();
     return this.findOne(id);

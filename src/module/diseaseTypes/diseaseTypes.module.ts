@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DiseaseType } from './diseaseTypes.entity';
 import { DiseaseTypesService } from './diseaseTypes.service';
 import { DiseaseTypesController } from './diseaseTypes.controller';
+import { DiseaseType } from './diseaseTypes.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([DiseaseType])], // Đăng ký repository
-  providers: [DiseaseTypesService],
+  imports: [TypeOrmModule.forFeature([DiseaseType])],
   controllers: [DiseaseTypesController],
-  exports: [TypeOrmModule], // Export để module khác sử dụng
+  providers: [DiseaseTypesService],
+  exports: [DiseaseTypesService],
 })
 export class DiseaseTypesModule {}

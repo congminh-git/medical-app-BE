@@ -3,14 +3,14 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 @Entity('symptoms')
 export class Symptom {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
-  @Column({ type: 'varchar', unique: true })
-  name: string;
+  @Column()
+  name!: string;
 
-  @Column({ type: 'text', nullable: true })
-  description: string;
+  @Column()
+  description!: string;
 
   @CreateDateColumn({ type: 'timestamp', nullable: true })
-  created_at: Date | null;
+  created_at!: Date | null;
 }

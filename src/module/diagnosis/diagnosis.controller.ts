@@ -14,28 +14,28 @@ import { Diagnosis } from './diagnosis.entity';
 export class DiagnosisController {
   constructor(private readonly diagnosisService: DiagnosisService) {}
 
-  @Post()
-  create(@Body() createDto: any) {
-    return this.diagnosisService.create(createDto);
-  }
-
   @Get()
-  findAll() {
+  findAll(): Promise<Diagnosis[]> {
     return this.diagnosisService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string): Promise<Diagnosis> {
     return this.diagnosisService.findOne(+id);
   }
 
+  @Post()
+  create(@Body() data: any): Promise<Diagnosis> {
+    return this.diagnosisService.create(data);
+  }
+
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateDto: any) {
-    return this.diagnosisService.update(+id, updateDto);
+  update(@Param('id') id: string, @Body() data: any): Promise<Diagnosis> {
+    return this.diagnosisService.update(+id, data);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: string): Promise<void> {
     return this.diagnosisService.remove(+id);
   }
 }

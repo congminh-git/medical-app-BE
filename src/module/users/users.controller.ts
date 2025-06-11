@@ -52,4 +52,9 @@ export class UsersController {
   async updateUserImage(@Param('id') id: number, @Body() updateUserDto: any) {
     return await this.usersService.updateUserImage(id, updateUserDto);
   }
+
+  @Put(':id/toggle-status')
+  async toggleUserStatus(@Param('id') id: number) {
+    return await this.usersService.toggleUserStatus(id);
+  }
 }

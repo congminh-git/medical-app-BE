@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Symptom } from './symptoms.entity';
 import { SymptomsService } from './symptoms.service';
 import { SymptomsController } from './symptoms.controller';
+import { Symptom } from './symptoms.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Symptom])], // Đăng ký repository
-  providers: [SymptomsService],
+  imports: [TypeOrmModule.forFeature([Symptom])],
   controllers: [SymptomsController],
-  exports: [TypeOrmModule], // Export để module khác sử dụng
+  providers: [SymptomsService],
+  exports: [SymptomsService],
 })
 export class SymptomsModule {}
